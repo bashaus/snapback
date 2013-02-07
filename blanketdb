@@ -1,0 +1,70 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'yaml'
+require 'optparse'
+require 'pp'
+
+require 'src/options'
+require 'src/transaction'
+require 'src/database'
+require 'src/app'
+require 'src/dsl'
+
+begin
+  # Ensure user is root
+  if Process.uid != 0 then
+    raise "Must run as root"
+  end
+
+  $options = Blanketdb::Options.parse(ARGV)
+
+  case $options[:command]
+  when "install"
+    Blanketdb::App.instance.install
+
+    puts ""
+    exit
+  end
+
+  begin
+    # Read confirmation options
+    $config = YAML.load_file($options[:config])
+  rescue
+    raise "Could not load configuration file: #{$options[:config]}"
+  end
+
+  # Connect to MySQL
+  $database = Blanketdb::Database.instance
+  $database.hostname = $config['mysql']['hostname']
+  $database.username = $config['mysql']['username']
+  $database.password = $config['mysql']['password']
+  $database.connect
+
+  case $options[:command]
+  when "create"
+    Blanketdb::App.instance.create
+  when "snapshot"
+    Blanketdb::App.instance.snapshot
+  when "commit"
+    Blanketdb::App.instance.commit
+  when "rollback"
+    Blanketdb::App.instance.rollback
+  when "drop"
+    Blanketdb::App.instance.drop
+  when "mount"
+    Blanketdb::App.instance.mount
+  when "unmount"
+    Blanketdb::App.instance.unmount
+  end
+rescue
+  puts ""
+  $stderr.puts "#{$!.to_s.red}"
+  puts "Use -v (--verbose) to view entire process".red if !$options[:verbose]
+  puts "Rolling back".red
+  puts ""
+
+  Blanketdb::Transaction.instance.do_rollback
+end
+
+puts ""

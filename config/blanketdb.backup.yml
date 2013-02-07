@@ -1,0 +1,17 @@
+{
+    lvm: {
+        volume_group    : DEFAULT,
+        prefix_database : blanketdb-active,
+        prefix_backup   : blanketdb-backup
+    },
+
+    mysql: {
+        hostname        : 'localhost',
+        username        : 'root',
+        password        : 'Republic01'
+    },
+
+    filesystem: {
+        mount           : '/mnt/mysql'
+    }
+}
