@@ -8,7 +8,6 @@ require 'pp'
 require 'src/options'
 require 'src/transaction'
 require 'src/database'
-require 'src/app'
 require 'src/dsl'
 
 begin
@@ -21,7 +20,8 @@ begin
 
   case $options[:command]
   when "install"
-    Blanketdb::App.instance.install
+    require "src/app/install"
+    Blanketdb::App::Install.instance.go
 
     puts ""
     exit
@@ -43,19 +43,26 @@ begin
 
   case $options[:command]
   when "create"
-    Blanketdb::App.instance.create
+    require "src/app/create"
+    Blanketdb::App::Create.instance.go
   when "snapshot"
-    Blanketdb::App.instance.snapshot
+    require "src/app/snapshot"
+    Blanketdb::App::Snapshot.instance.go
   when "commit"
-    Blanketdb::App.instance.commit
+    require "src/app/commit"
+    Blanketdb::App::Commit.instance.go
   when "rollback"
-    Blanketdb::App.instance.rollback
+    require "src/app/rollback"
+    Blanketdb::App::Rollback.instance.go
   when "drop"
-    Blanketdb::App.instance.drop
+    require "src/app/drop"
+    Blanketdb::App::Drop.instance.go
   when "mount"
-    Blanketdb::App.instance.mount
+    require "src/app/mount"
+    Blanketdb::App::Mount.instance.go
   when "unmount"
-    Blanketdb::App.instance.unmount
+    require "src/app/unmount"
+    Blanketdb::App::Unmount.instance.go
   end
 rescue
   puts ""

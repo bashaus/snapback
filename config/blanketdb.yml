@@ -2,7 +2,7 @@
 filesystem: 
   mount: /mnt/mysql
 lvm: 
-  prefix_backup: blanketdb-backup
+  prefix_database: blanketdb-active
   volume_group: !str 
     str: DEFAULT
     "@background": 9
@@ -11,8 +11,8 @@ lvm:
       str: DEFAULT
       "@background": 9
       "@mode": 0
-  prefix_database: blanketdb-active
+  prefix_backup: blanketdb-backup
 mysql: 
+  password: Republic01
   hostname: localhost
   username: root
-  password: Republic01
