@@ -16,6 +16,7 @@ This scripts automates the concepts that are discussed in the following articles
 
 * lullabot.com -- [MySQL Backups Using LVM Snapshots](http://www.lullabot.com/articles/mysql-backups-using-lvm-snapshots)
 * tldp.org -- [Taking a Backup Using Snapshots](http://tldp.org/HOWTO/LVM-HOWTO/snapshots_backup.html)
+* mysqlperformanceblog.com -- [Faster Point In Time Recovery with LVM2 Snaphots and Binary Logs](http://www.mysqlperformanceblog.com/2012/02/23/faster-point-in-time-recovery-with-lvm2-snaphots-and-binary-logs/)
 
 If you'd like more information on how to setup LVM on a Linux installation, see:
 
