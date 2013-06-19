@@ -1,6 +1,6 @@
 require "singleton"
 
-module Blanketdb
+module Snapback
   module App
     class Rollback
       include Singleton

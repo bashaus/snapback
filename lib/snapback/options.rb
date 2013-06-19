@@ -1,6 +1,6 @@
 require 'optparse'
 
-module Blanketdb
+module Snapback
   class Options
     def self.parse(args)
       options = {}
@@ -8,7 +8,7 @@ module Blanketdb
       options[:command]  = nil
       options[:database] = nil
 
-      options[:config]  = "config/blanketdb.yml"
+      options[:config]  = "#{File.expand_path('~')}/.snapback.yml"
       options[:verbose] = false
       options[:size]    = nil
 
@@ -19,11 +19,11 @@ module Blanketdb
         opts.separator ""
         opts.separator "Commands:"
         opts.separator "    install".ljust(37)                 + "Check the environment is sane and setup"
-        opts.separator "    create DBNAME -s SIZE".ljust(37)   + "Create a new blanketdb compliant database"
+        opts.separator "    create DBNAME -s SIZE".ljust(37)   + "Create a new snapback compliant database"
         opts.separator "    snapshot DBNAME -s SIZE".ljust(37) + "Take a snapshot of the current position"
         opts.separator "    commit DBNAME".ljust(37)           + "Commit the working copy"
         opts.separator "    rollback DBNAME".ljust(37)         + "Rollback the working copy to the snapshot"
-        opts.separator "    drop DBNAME".ljust(37)             + "Drop a blanketdb database"
+        opts.separator "    drop DBNAME".ljust(37)             + "Drop an existing database"
         opts.separator "    mount DBNAME".ljust(37)            + "Mount an existing database"
         opts.separator "    unmount DBNAME".ljust(37)          + "Unmount an existing database"
 

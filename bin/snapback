@@ -5,23 +5,28 @@ require 'yaml'
 require 'optparse'
 require 'pp'
 
-require 'src/options'
-require 'src/transaction'
-require 'src/database'
-require 'src/dsl'
+require 'snapback/options'
+require 'snapback/transaction'
+require 'snapback/database'
+require 'snapback/dsl'
 
 begin
   # Ensure user is root
   if Process.uid != 0 then
     raise "Must run as root"
   end
+rescue
+  $stderr.puts "#{$!.to_s.red}"
+  exit
+end
 
-  $options = Blanketdb::Options.parse(ARGV)
+begin
+  $options = Snapback::Options.parse(ARGV)
 
   case $options[:command]
   when "install"
-    require "src/app/install"
-    Blanketdb::App::Install.instance.go
+    require "snapback/app/install"
+    Snapback::App::Install.instance.go
 
     puts ""
     exit
@@ -35,7 +40,7 @@ begin
   end
 
   # Connect to MySQL
-  $database = Blanketdb::Database.instance
+  $database = Snapback::Database.instance
   $database.hostname = $config['mysql']['hostname']
   $database.username = $config['mysql']['username']
   $database.password = $config['mysql']['password']
@@ -43,26 +48,26 @@ begin
 
   case $options[:command]
   when "create"
-    require "src/app/create"
-    Blanketdb::App::Create.instance.go
+    require "snapback/app/create"
+    Snapback::App::Create.instance.go
   when "snapshot"
-    require "src/app/snapshot"
-    Blanketdb::App::Snapshot.instance.go
+    require "snapback/app/snapshot"
+    Snapback::App::Snapshot.instance.go
   when "commit"
-    require "src/app/commit"
-    Blanketdb::App::Commit.instance.go
+    require "snapback/app/commit"
+    Snapback::App::Commit.instance.go
   when "rollback"
-    require "src/app/rollback"
-    Blanketdb::App::Rollback.instance.go
+    require "snapback/app/rollback"
+    Snapback::App::Rollback.instance.go
   when "drop"
-    require "src/app/drop"
-    Blanketdb::App::Drop.instance.go
+    require "snapback/app/drop"
+    Snapback::App::Drop.instance.go
   when "mount"
-    require "src/app/mount"
-    Blanketdb::App::Mount.instance.go
+    require "snapback/app/mount"
+    Snapback::App::Mount.instance.go
   when "unmount"
-    require "src/app/unmount"
-    Blanketdb::App::Unmount.instance.go
+    require "snapback/app/unmount"
+    Snapback::App::Unmount.instance.go
   end
 rescue
   puts ""
@@ -71,7 +76,7 @@ rescue
   puts "Rolling back".red
   puts ""
 
-  Blanketdb::Transaction.instance.do_rollback
+  Snapback::Transaction.instance.do_rollback
 end
 
 puts ""

@@ -1,7 +1,7 @@
 require "lvm"
 require "singleton"
 
-module Blanketdb
+module Snapback
   module App
     class Install
       include Singleton
@@ -10,16 +10,16 @@ module Blanketdb
         puts ""
         puts "Hi!"
         puts ""
-        puts "I'm going to guide you through setting up Blanketdb."
+        puts "I'm going to guide you through setting up Snapback."
         puts "This script will check to see if your environment can run "
-        puts "Blanketdb and will setup configuration files for you."
+        puts "Snapback and will setup configuration files for you."
         puts ""
 
         begin
           run "Checking LVM is installed",
             "lvm version"
         rescue
-          raise "You must install LVM before you can use this application"
+          raise "You do not have LVM installed on this computer. You cannot use snapback."
         end
 
         # Get information from LVM
@@ -34,11 +34,11 @@ module Blanketdb
 
         # Decide which Logical volume use to use
         if volume_groups.size == 0 then
-          raise "You do not have any volume groups in LVM. Please setup LVM before using Blanketdb"
+          raise "You do not have any volume groups in LVM. Please setup LVM before using Snapback"
         elsif volume_groups.size == 1 then
           volume_group = volume_groups[0];
           puts "You have one volume group named #{volume_group.name.green}."
-          puts "Blanketdb will use this logical volume."
+          puts "Snapback will use this logical volume."
         else
           puts "Here is a list of volume groups on your system:"
 
@@ -46,7 +46,7 @@ module Blanketdb
             puts "#{volume_groups.size}.\t#{vg.name}"
           end
 
-          volume_group_number = ask_int "Which volume group would you like Blanketdb use", volume_groups.size
+          volume_group_number = ask_int "Which volume group would you like Snapback use", volume_groups.size
           volume_group = volume_groups[volume_group_number - 1];
         end
 
@@ -78,7 +78,7 @@ module Blanketdb
           puts ""
           puts "Enter the crudentials to connect to MySQL"
 
-          $database = Blanketdb::Database.instance
+          $database = Snapback::Database.instance
 
           $database.hostname = ask_string "MySQL hostname [localhost]"
           if $database.hostname.empty? then
@@ -122,8 +122,8 @@ module Blanketdb
         $config = {
           'lvm' => {
               'volume_group'    => volume_group.name.to_s,
-              'prefix_database' => 'blanketdb-active',
-              'prefix_backup'   => 'blanketdb-backup'
+              'prefix_database' => 'snapback-active',
+              'prefix_backup'   => 'snapback-backup'
           },
 
           'mysql' => {
@@ -137,19 +137,19 @@ module Blanketdb
           }
         }
 
-        File.open("config/blanketdb.yml", 'w+') { |f|
+        File.open($options[:config], 'w+') { |f|
           f.write($config.to_yaml)
         }
 
         on_rollback lambda {
-          File.unlink "config/blanketdb.yml"
+          File.unlink $options[:config]
         }
 
         puts ""
-        puts "Blanketdb is now installed and configured."
-        puts "To start using Blanketdb, run the following command: "
+        puts "Snapback is now installed and configured."
+        puts "To start using Snapback, run the following command: "
         puts ""
-        puts "sudo ./blanketdb --help".yellow
+        puts "sudo snapback --help".yellow
       end
     end
   end

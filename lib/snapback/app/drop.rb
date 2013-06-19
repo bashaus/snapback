@@ -1,8 +1,9 @@
 require "singleton"
+require "src/app/commit"
 
-module Blanketdb
+module Snapback
   module App
-    class Unmount
+    class Drop
       include Singleton
 
       def go
@@ -10,6 +11,13 @@ module Blanketdb
         logical_volume_name = "#{$config['lvm']['prefix_database']}-#{$options[:database]}"
         mount_dir = get_mount_dir $options[:database]
         mysql_data_dir = $database.get_data_dir
+
+        # Remove the backup
+        Snapback::App::Commit.instance.go
+
+        if !$database.db_exists?($options[:database]) then
+          raise "Database '#{$options[:database]}' does not exist"
+        end
 
         # Flush
         exec_flush
@@ -26,6 +34,10 @@ module Blanketdb
 
         # Unmount
         exec_unmount "/dev/#{volume_group_name}/#{logical_volume_name}", mount_dir
+
+        # Remove logical volume
+        run "Remove logical volume", 
+          "lvremove -f /dev/#{volume_group_name}/#{logical_volume_name}"
 
         # Start the MySQL Server
         $database.server_start

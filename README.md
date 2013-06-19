@@ -1,4 +1,4 @@
-# Blanketdb
+# Snapback
 
 Version 0.1 Alpha
 
@@ -37,11 +37,11 @@ If you'd like more information on how to setup LVM on a Linux installation, see:
 
 ### Setup
 
-Run the following command to check and install Blanketdb
+Run the following command to check and install Snapback
 
 To start using this application, you must run this once:
 
-    sudo ./blanketdb install
+    sudo snapback install
 
 This creates the appropriate directories and checks that you have the required programs installed.
 
@@ -58,7 +58,7 @@ To create a new database, you must specify the following values:
 
 E.g.: Create a database called "camera" which should hold 1G
 
-    sudo ./blanketdb create camera --size 1G
+    sudo snapback create camera --size 1G
 
 ## Snapshot an existing database
 
@@ -69,7 +69,7 @@ To make a snapshot, you must specify the following values:
 
 E.g.: Snapshot a database called "camera", where the changes will amount to an extra 100MB.
 
-    sudo ./blanketdb snapshot camera --size 100M
+    sudo snapback snapshot camera --size 100M
 
 ## Rollback a database to the snapshot
 
@@ -77,7 +77,7 @@ Once you've finished trying to make changes in your database, you can create a s
 
 E.g.: Rollback the database "camera" back to the date of the snapshot.
 
-    sudo ./blanketdb rollback camera
+    sudo snapback rollback camera
 
 ## Drop a database
 
@@ -85,7 +85,7 @@ Once you've finished with the database, you can drop it from MySQL and remove th
 
 E.g.: Drop the database "camera".
 
-    sudo ./blanketdb drop camera
+    sudo snapback drop camera
 
 ## Mount existing devices
 
@@ -93,7 +93,7 @@ If you want to mount a logical volume (e.g.: after a reboot), you can use the mo
 
 E.g.: Continue using the database "camera"
 
-    sudo ./blanketdb mount camera
+    sudo snapback mount camera
 
 ## Unmount existing devices
 
@@ -101,7 +101,7 @@ If (for any reason) you want to unmount a logical volume (e.g.: disable a databa
 
 E.g.: Stop using the database "camera"
 
-    sudo ./blanketdb unmount camera
+    sudo snapback unmount camera
 
 ## Licence
 

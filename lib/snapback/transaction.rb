@@ -1,6 +1,6 @@
 require 'singleton'
 
-module Blanketdb
+module Snapback
   class Transaction
     include Singleton
     

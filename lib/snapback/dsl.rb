@@ -6,7 +6,7 @@ LOCKED_FILES = ['.', '..', 'lost+found']
 # DSL: on_rollback
 # Add a callback if a method (somewhere) fails
 def on_rollback method
-  Blanketdb::Transaction.instance.add_rollback_method method
+  Snapback::Transaction.instance.add_rollback_method method
 end
 
 def run description, command

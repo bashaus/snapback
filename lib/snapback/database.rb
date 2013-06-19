@@ -3,7 +3,7 @@ require 'mysql'
 
 # ## Database functions ##
 
-module Blanketdb
+module Snapback
   class Database
     include Singleton
 
