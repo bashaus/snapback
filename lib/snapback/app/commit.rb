@@ -20,7 +20,7 @@ module Snapback
         }
 
         # Remove logical volume
-        run "Remove logical volume", 
+        run "Committing logical volume", 
           "lvremove -f /dev/#{volume_group_name}/#{logical_volume_name}"
 
         # Start the MySQL Server
