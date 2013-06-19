@@ -8,7 +8,8 @@ Create MySQL snapshots for easy development rollback.
 
 ### Use case
 
-Large databases can be cumbersome to reload particularly when testing database migrations. This script utilises logical volume management (LVM) to create database snapshots, allowing you to rollback to specified point in time.
+Large databases can be cumbersome to reload particularly when testing database migrations. 
+This gem utilises logical volume management (LVM) to create database snapshots, allowing you to rollback to specified point in time.
 
 ### Problem domain
 
@@ -30,24 +31,60 @@ If you'd like more information on how to setup LVM on a Linux installation, see:
 * Ruby (tested on version 1.8.7)
 * Logical volume management (tested on version 2.02.66(2))
 * MySQL (tested on version 5.5.29-0ubuntu0.12.04.1)
-* sudo apt-get install libmysql-ruby libmysqlclient-dev
-* sudo gem install mysql
-* sudo gem install colorize
-* sudo gem install open4
 
-### Setup
+### Installation
 
-Run the following command to check and install Snapback
+    # If the MySQL client libraries aren't already installed, you may need to run this
+    sudo apt-get update
+    sudo apt-get install build-essential
+    sudo apt-get install libmysql-ruby
+    sudo apt-get install libmysqlclient-dev
+
+    # Install the gem
+    sudo gem install snapback
+
+The gem should also automatically install the following gems:
+
+* mysql
+* colorize
+* open4
+* ruby-lvm
+
+You must then enable multiple tablespaces.
+Add a line to the [mysqld] section of your MySQL my.cnf:
+
+[mysqld]
+innodb_file_per_table=ON
+
+### Configuration
+
+If you're on Ubuntu (or other Linux system that uses AppArmor), you may need to allow MySQL to use the mounted directories.
+
+    sudo nano /etc/apparmor.d/usr.sbin/mysqld
+
+Add the following lines to the file:
+
+    /mnt/mysql/ rwk,
+    /mnt/mysql/** rwk,
+
+Restart AppArmor and MySQL
+
+    service apparmor restart
+    service mysql restart
+
+### Usage
+
+Only recommended for use on virtual machines.
+Not recommended for production environments.
+
+## Setup
 
 To start using this application, you must run this once:
 
     sudo snapback install
 
 This creates the appropriate directories and checks that you have the required programs installed.
-
-### Usage
-
-Not recommended for use in production environments.
+It will also ask you questions about your environment and save your configuration in your home directory.
 
 ## Creating a new database
 
@@ -102,6 +139,20 @@ If (for any reason) you want to unmount a logical volume (e.g.: disable a databa
 E.g.: Stop using the database "camera"
 
     sudo snapback unmount camera
+
+## LVM Issues
+
+If you're getting an error message similar to following:
+
+    File descriptor ? (/home/?/.snapback.yml) leaked on lvcreate invocation.
+
+You can circumvent this error by adding the following environmental variable before your command:
+
+    LVM_SUPPRESS_FD_WARNINGS=1
+
+For example:
+
+    sudo LVM_SUPPRESS_FD_WARNINGS=1 sudo snapback snapshot camera --size 100M
 
 ## Licence
 

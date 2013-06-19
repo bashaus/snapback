@@ -31,7 +31,7 @@ module Snapback
         opts.separator "Options:"
 
         opts.on("-s", "--size SIZE",
-                "Allocate a size parameter") do |q|
+                "Allocate a size parameter (e.g.: 1M, 1G, 1T)") do |q|
           options[:size] = q
         end
 
