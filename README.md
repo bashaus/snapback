@@ -53,8 +53,8 @@ The gem should also automatically install the following gems:
 You must then enable multiple tablespaces.
 Add a line to the [mysqld] section of your MySQL my.cnf:
 
-[mysqld]
-innodb_file_per_table=ON
+    [mysqld]
+    innodb_file_per_table=ON
 
 ### Configuration
 
