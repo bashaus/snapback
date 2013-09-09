@@ -1,7 +1,7 @@
 Gem::Specification.new do |gem|
   gem.name        = 'snapback'
-  gem.version     = '0.0.1'
-  gem.date        = '2013-06-19'
+  gem.version     = '0.0.2'
+  gem.date        = '2013-09-09'
   gem.summary     = 'Snapback'
   gem.description = 'A simple logical volume database manager'
   gem.homepage    = 'http://github.com/bashaus/snapback'
