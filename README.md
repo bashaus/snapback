@@ -1,8 +1,8 @@
 # Snapback
 
-Version 0.1 Alpha
+Version 0.0.2
 
-Create MySQL snapshots for easy development rollback.
+Create MySQL snapshots for easy development rollback. Only recommended for use on virtual machines, not recommended for production environments.
 
 ## Project Details
 
@@ -71,11 +71,6 @@ Restart AppArmor and MySQL
 
     service apparmor restart
     service mysql restart
-
-### Usage
-
-Only recommended for use on virtual machines.
-Not recommended for production environments.
 
 ## Setup
 
