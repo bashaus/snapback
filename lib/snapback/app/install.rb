@@ -37,7 +37,7 @@ module Snapback
           raise "You do not have any volume groups in LVM. Please setup LVM before using Snapback"
         elsif volume_groups.size == 1 then
           volume_group = volume_groups[0];
-          puts "You have one volume group named #{volume_group.name.green}."
+          puts "You have one volume group named #{volume_group.name.colorize(:green)}."
           puts "Snapback will use this logical volume."
         else
           puts "Here is a list of volume groups on your system:"

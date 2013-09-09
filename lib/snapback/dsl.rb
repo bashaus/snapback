@@ -1,5 +1,5 @@
-require "colorize"
-require "open4"
+require 'colorize'
+require 'open4'
 
 LOCKED_FILES = ['.', '..', 'lost+found']
 
@@ -47,15 +47,15 @@ def debug *args
 end
 
 def show_ok
-  puts "[#{"  OK  ".green}]"
+  puts "[#{"  OK  ".colorize(:green)}]"
 end
 
 def show_no
-  puts "[#{"  NO  ".red}]"
+  puts "[#{"  NO  ".colorize(:red)}]"
 end
 
 def show_failed
-  puts "[#{"FAILED".red}]"
+  puts "[#{"FAILED".colorize(:red)}]"
 end
 
 def ask_int question, max
