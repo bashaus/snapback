@@ -1,19 +1,31 @@
-require 'singleton'
-
 module Snapback
   class Transaction
-    include Singleton
-    
-    @@rollback_commands = []
 
-    def add_rollback_method method
-      @@rollback_commands.push method
+    def initialize(&block)
+      @reverts = []
+
+      begin
+        instance_eval &block
+      rescue Exception => msg  
+        rollback
+        raise msg # re-throw
+      end
     end
 
-    def do_rollback
-      while rollback_command = @@rollback_commands.pop do
-        rollback_command.call
+    def revert(&block)
+      @reverts.push block
+    end
+
+    def rollback
+      puts ""
+      puts "An error occurred ... rolling back"
+      puts ""
+
+      while revert = @reverts.pop
+        revert.call
       end
+      
+      puts ""
     end
   end
 end

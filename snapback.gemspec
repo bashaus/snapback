@@ -1,19 +1,33 @@
-Gem::Specification.new do |gem|
-  gem.name        = 'snapback'
-  gem.version     = '0.0.2'
-  gem.date        = '2013-09-09'
-  gem.summary     = 'Snapback'
-  gem.description = 'A simple logical volume database manager'
-  gem.homepage    = 'http://github.com/bashaus/snapback'
-  gem.authors     = ['Bashkim Isai']
-  gem.license     = 'MIT'
+# Ensure we require the local version and not one we might have installed already
+require File.join([File.dirname(__FILE__),'lib','snapback','version.rb'])
+spec = Gem::Specification.new do |s| 
+  s.name        = 'snapback'
+  s.version     = Snapback::VERSION
+  s.date        = '2013-09-09'
+  s.authors     = ['Bashkim Isai']
+  s.license     = 'MIT'
+  s.homepage    = 'http://github.com/bashaus/snapback'
+  s.platform    = Gem::Platform::RUBY
+  s.summary     = 'Snapback'
 
-  gem.files       = Dir['lib/**/*', 'bin/*', 'README*']
-  gem.executables << 'snapback'
-  
+  s.files = Dir['lib/**/*', 'bin/*', 'README*']
+
+  s.require_paths << 'lib'
+  s.has_rdoc = true
+  s.extra_rdoc_files = ['README.rdoc','snapback.rdoc']
+  s.rdoc_options << '--title' << 'snapback' << '--main' << 'README.rdoc' << '-ri'
+  s.bindir = 'bin'
+  s.executables << 'snapback'
+
+  s.add_development_dependency('rake')
+  s.add_development_dependency('rdoc')
+  s.add_development_dependency('aruba')
+
+  s.add_runtime_dependency('gli','2.8.0')
+
   # dependencies
-  gem.add_dependency('mysql', '>= 2.9.1')
-  gem.add_dependency('open4', '>= 1.3.0')
-  gem.add_dependency('ruby-lvm', '>= 0.1.1')
-  gem.add_dependency('colorize', '~> 0.5.8')
+  s.add_dependency('mysql', '>= 2.9.1')
+  s.add_dependency('open4', '>= 1.3.0')
+  s.add_dependency('ruby-lvm', '>= 0.1.1')
+  s.add_dependency('colorize', '~> 0.5.8')
 end

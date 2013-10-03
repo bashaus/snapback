@@ -1,4 +1,60 @@
 #!/usr/bin/env ruby
+require 'gli'
+require 'colorize'
+require 'snapback'
 
-require 'snapback/cli'
-Snapback::CLI.execute
+include GLI::App
+
+require 'snapback/cli/install'
+require 'snapback/cli/create'
+require 'snapback/cli/drop'
+require 'snapback/cli/snapshot'
+require 'snapback/cli/commit'
+require 'snapback/cli/rollback'
+require 'snapback/cli/mount'
+require 'snapback/cli/unmount'
+
+program_desc 'Create database snapshots using logical volume management (LVM)'
+
+version Snapback::VERSION
+
+desc 'Debugging information'
+switch [:v,:verbose]
+
+desc 'Location of the snapback configuration file'
+flag :config, :default_value =>  '~/.snapback.yml'
+
+pre do |global,command,options,args|
+  # Pre logic here
+  # Return true to proceed; false to abort and not call the
+  # chosen command
+  # Use skips_pre before a command to skip this block
+  # on that command only
+
+  # Check the user is running as root  
+  if Process.uid != 0 then
+    raise "You must run snapback as #{"root".colorize(:red)}"
+  end
+
+  # Normalise the configuration filename
+  global[:config] = File.expand_path(global[:config])
+
+  # Annouce the function
+  puts "Snapback is about to #{command.name.to_s.colorize(:green)}"
+
+  true
+end
+
+post do |global,command,options,args|
+  # Post logic here
+  # Use skips_post before a command to skip this
+  # block on that command only
+end
+
+on_error do |exception|
+  # Error logic here
+  # return false to skip default error handling
+  true
+end
+
+exit run(ARGV)
