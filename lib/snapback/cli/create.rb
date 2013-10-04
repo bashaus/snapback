@@ -3,7 +3,7 @@ arg_name 'database [, ...]'
 command :create do |c|
 
   c.desc 'Disk size of database to create'
-  c.flag :s
+  c.flag [:s, :size]
 
   c.action do |global_options,options,args|
     help_now!('parameter -s for size is required') if options[:s].nil?
