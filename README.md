@@ -54,7 +54,7 @@ You must then enable multiple tablespaces.
 Add a line to the [mysqld] section of your MySQL my.cnf:
 
     [mysqld]
-    innodb_file_per_table=ON
+    innodb_file_per_table
 
 ### Configuration
 
@@ -139,7 +139,7 @@ E.g.: Stop using the database "camera"
 
 If you're getting an error message similar to following:
 
-    File descriptor ? (/home/?/.snapback.yml) leaked on lvcreate invocation.
+    File descriptor ? (~/.snapback.yml) leaked on lvcreate invocation.
 
 You can circumvent this error by adding the following environmental variable before your command:
 
@@ -147,7 +147,7 @@ You can circumvent this error by adding the following environmental variable bef
 
 For example:
 
-    sudo LVM_SUPPRESS_FD_WARNINGS=1 sudo snapback snapshot camera --size 100M
+    sudo LVM_SUPPRESS_FD_WARNINGS=1 snapback create camera --size 100M
 
 ## Licence
 
