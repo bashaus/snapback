@@ -1,6 +1,6 @@
 # Snapback
 
-Version 0.0.2
+Version 0.0.3
 
 Create MySQL snapshots for easy development rollback. Only recommended for use on virtual machines, not recommended for production environments.
 

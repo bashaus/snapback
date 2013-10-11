@@ -17,15 +17,18 @@ module Snapback
     end
 
     def rollback
-      puts ""
-      puts "An error occurred ... rolling back"
-      puts ""
+      if Snapback.verbose?
+        puts ""
+        puts "An error occurred ... rolling back"
+        puts ""
+      end
 
       while revert = @reverts.pop
         revert.call
       end
       
-      puts ""
+      
+      puts "" if Snapback.verbose?
     end
   end
 end

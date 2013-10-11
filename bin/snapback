@@ -18,8 +18,8 @@ program_desc 'Create database snapshots using logical volume management (LVM)'
 
 version Snapback::VERSION
 
-desc 'Debugging information'
-switch [:v,:verbose]
+desc 'Show debugging messages'
+switch [:q,:quiet]
 
 desc 'Location of the snapback configuration file'
 flag :config, :default_value =>  '~/.snapback.yml'
@@ -39,8 +39,14 @@ pre do |global,command,options,args|
   # Normalise the configuration filename
   global[:config] = File.expand_path(global[:config])
 
+  if global[:quiet] then
+    Snapback.set_quiet
+  else
+    Snapback.set_verbose
+  end
+
   # Annouce the function
-  puts "Snapback is about to #{command.name.to_s.colorize(:green)}"
+  puts "Snapback is about to #{command.name.to_s.colorize(:green)}" if Snapback.verbose?
 
   true
 end

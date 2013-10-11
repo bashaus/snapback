@@ -1,5 +1,0 @@
-= snapback
-
-Generate this with
-    snapback rdoc
-After you have described your command line interface

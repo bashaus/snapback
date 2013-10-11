@@ -2,7 +2,7 @@ require 'snapback/mysql/client_control'
 
 module Snapback
   module Configuration
-    class Configuration_0_0_2
+    class Configuration_0_0_3
 
       def initialize(yaml)
         @@yaml = yaml

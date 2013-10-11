@@ -1,6 +1,0 @@
-= snapback
-
-Describe your project here
-
-:include:snapback.rdoc
-

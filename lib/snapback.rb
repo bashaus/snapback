@@ -6,9 +6,31 @@ require 'snapback/filesystem'
 
 # Command
 
+module Snapback
+  @@verbose = false
+
+  def self.set_quiet
+    @@verbose = true
+  end
+
+  def self.set_verbose
+    @@verbose = false
+  end
+
+  def self.quiet?
+    @@verbose == true
+  end
+
+  def self.verbose?
+    @@verbose == false
+  end
+end
+
 def run_command description, command = "", &block
-  print "#{description}".to_s.ljust(72)
-  STDOUT.flush
+  if Snapback.verbose?
+    print "#{description}".to_s.ljust(72)
+    STDOUT.flush
+  end
 
   begin
     if block_given? then
@@ -42,14 +64,17 @@ end
 # Output status
 
 def return_ok
+  return nil if Snapback.quiet?
   puts "[#{"  OK  ".colorize(:green)}]"
 end
 
 def return_no
+  return nil if Snapback.quiet?
   puts "[#{"  NO  ".colorize(:red)}]"
 end
 
 def return_failed
+  return nil if Snapback.quiet?
   puts "[#{"FAILED".colorize(:red)}]"
 end
 
