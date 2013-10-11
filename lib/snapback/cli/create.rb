@@ -28,12 +28,12 @@ command :create do |c|
         mysql_database_directory  = "#{mysql_client.get_data_directory}/#{database}"
 
         database_exists = run_command "Checking database exists: #{database}" do
-          mysql_client.db_exists?(database)
+          mysql_client.database_exists?(database)
         end
 
         if !database_exists then
           run_command "Creating database: #{database}" do
-            mysql_client.db_create(database)
+            mysql_client.database_create(database)
           end
 
           revert do

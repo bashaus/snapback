@@ -15,7 +15,7 @@ command :drop do |c|
       # Start the transaction
       Snapback::Transaction.new do
         run_command "Selecting database: #{database}" do
-          mysql_client.db_use(database)
+          mysql_client.database_select(database)
         end
 
         vg_name = config.lvm_volume_group
@@ -25,18 +25,19 @@ command :drop do |c|
         mount_database_directory  = config.filesystem_mount_directory(database)
         mysql_database_directory  = "#{mysql_client.get_data_directory}/#{database}"
 
-        # # Remove the backup
-        # Snapback::App::Commit.instance.go
-
         # Drop tablespaces
         tables = run_command "Getting list of tables in database" do
-          mysql_client.db_tables
+          mysql_client.database_tables
         end
 
         tables.each do |table|
           table = table.to_s
+          run_command "Changing table engine to MyISAM: #{table}" do
+            mysql_client.table_set_engine(table, "MyISAM")
+          end
+
           run_command "Dropping table: #{table}" do
-            mysql_client.discard_and_drop_table(table)
+            mysql_client.table_drop(table)
           end
         end
 

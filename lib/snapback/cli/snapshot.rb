@@ -21,7 +21,7 @@ command :snapshot do |c|
       Snapback::Transaction.new do
 
         run_command "Selecting database: #{database}" do
-          mysql_client.db_use(database)
+          mysql_client.database_select(database)
         end
 
         vg_name = config.lvm_volume_group
@@ -31,6 +31,27 @@ command :snapshot do |c|
         mount_database_directory  = config.filesystem_mount_directory(database)
         mysql_database_directory  = "#{mysql_client.get_data_directory}/#{database}"
 
+        # Check
+
+        lv_available = run_command "Checking logical volume name is available" do
+          !File.exists?("/dev/#{vg_name}/#{config.lvm_snapshot_prefix}-#{database}")
+        end
+
+        if !lv_available then
+          raise "Logical volume #{lv_path.colorize(:red)} already exist"
+        end
+
+        # Drop tablespaces
+        tables = run_command "Getting list of tables in database" do
+          mysql_client.database_tables
+        end
+
+        tables.each do |table|
+          table = table.to_s
+          run_command "Changing table engine to MyISAM: #{table}" do
+            mysql_client.table_set_engine(table, "MyISAM")
+          end
+        end
 
         # Flush
         run_command "Flush tables with read lock" do
@@ -76,7 +97,7 @@ command :snapshot do |c|
         end
         
         # Branch the logical volume with a snapshot
-        run_command "Snapshot the logical volume",
+        run_command "Snapshoting to #{config.lvm_snapshot_prefix}-#{database}",
           "lvcreate -L #{options[:s]} -s -n #{config.lvm_snapshot_prefix}-#{database} #{lv_path}"
 
         revert do

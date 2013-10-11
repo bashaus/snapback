@@ -20,7 +20,7 @@ command :commit do |c|
       # Start the transaction
       Snapback::Transaction.new do
         run_command "Selecting database: #{database}" do
-          mysql_client.db_use(database)
+          mysql_client.database_select(database)
         end
 
         vg_name = config.lvm_volume_group
